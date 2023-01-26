@@ -121,32 +121,32 @@ bot.on(Events.InteractionCreate, (interaction) => {
 
 // Escolher a região
 bot.on(Events.InteractionCreate, (interaction) => {
-  const EmbedRe = new EmbedBuilder()
-    .setColor(0x2f3136)
-    .setTitle(':earth_americas: Escolha sua Região')
-    .setDescription(
-      'Clique no botão que corresponde a sua região e participe de um área exclusiva no servidor com torcedores da onde você mora!'
-    );
-  const actionsRe = new ActionRowBuilder().setComponents(
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_REGIONMG)
-      .setLabel('Minas Gerais')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_REGIONCP)
-      .setLabel('Outras Capitais')
-      .setStyle(ButtonStyle.Secondary)
-  );
-
   if (
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button &&
     interaction.customId === INTERACTION_IDS.BUTTON_REGION
   ) {
+    const regionEmbed = new EmbedBuilder()
+      .setColor(0x2f3136)
+      .setTitle(':earth_americas: Escolha sua Região')
+      .setDescription(
+        'Clique no botão que corresponde a sua região e participe de um área exclusiva no servidor com torcedores da onde você mora!'
+      );
+    const components = new ActionRowBuilder().setComponents(
+      new ButtonBuilder()
+        .setCustomId(INTERACTION_IDS.BUTTON_REGIONMG)
+        .setLabel('Minas Gerais')
+        .setStyle(ButtonStyle.Primary),
+      new ButtonBuilder()
+        .setCustomId(INTERACTION_IDS.BUTTON_REGIONCP)
+        .setLabel('Outras Capitais')
+        .setStyle(ButtonStyle.Secondary)
+    );
+
     interaction.reply({
       ephemeral: true,
-      embeds: [EmbedRe],
-      components: [actionsRe],
+      embeds: [regionEmbed],
+      components: [components],
     });
   }
 });
