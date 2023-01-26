@@ -19,7 +19,7 @@ const {
 
 // Ids dos botões
 const INTERACTION_IDS = {
-  BUTTON_OK: 'btn-1',
+  OK_BUTTON: 'btn-1',
   BUTTON_RULES: 'btn-2',
   BUTTON_REGION: 'bt-3',
   BUTTON_REGIONCPS: 'bt-4',
@@ -98,9 +98,10 @@ bot.on(Events.InteractionCreate, (interaction) => {
       .setImage(
         'https://cdn.discordapp.com/attachments/1065023880042909829/1066101388003774474/regrascruzeiro.png'
       );
+
     const row = new ActionRowBuilder().setComponents(
       new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.BUTTON_OK)
+        .setCustomId(INTERACTION_IDS.OK_BUTTON)
         .setLabel('Concordo')
         .setStyle(ButtonStyle.Success)
     );
@@ -110,18 +111,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
       embeds: [ruleEmbed],
       components: [row],
     });
-  }
-});
-
-// Mensagem pós botão concordo em Regras
-bot.on(Events.InteractionCreate, (interaction) => {
-  // console.log(interaction);
-
-  if (
-    interaction.type === InteractionType.MessageComponent &&
-    interaction.componentType === ComponentType.Button &&
-    interaction.customId === INTERACTION_IDS.BUTTON_OK
-  ) {
+  } else if (isButton && interaction.customId === INTERACTION_IDS.OK_BUTTON) {
     interaction.reply({
       ephemeral: true,
       content: 'Obrigado por entrar em nosso servidor oficial do Cruzeiro!',
