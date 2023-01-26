@@ -153,27 +153,22 @@ bot.on(Events.InteractionCreate, (interaction) => {
     .setDescription(
       'Então você mora na raiz do nosso time! Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
     );
-  const actionsMG = new ActionRowBuilder().setComponents(
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_MGBH)
-      .setLabel('Belo Horizonte')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_MGUBI)
-      .setLabel('Ubêrlandia')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_MGCONT)
-      .setLabel('Contagem')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_MGJF)
-      .setLabel('Juíz de Fora')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_MGMC)
-      .setLabel('Montes Claros')
-      .setStyle(ButtonStyle.Primary)
+
+  const mgCities = [
+    { buttonId: INTERACTION_IDS.BUTTON_MGBH, name: 'Belo Horizonte' },
+    { buttonId: INTERACTION_IDS.BUTTON_MGUBI, name: 'Ubêrlandia' },
+    { buttonId: INTERACTION_IDS.BUTTON_MGCONT, name: 'Contagem' },
+    { buttonId: INTERACTION_IDS.BUTTON_MGJF, name: 'Juíz de Fora' },
+    { buttonId: INTERACTION_IDS.BUTTON_MGMC, name: 'Montes Claros' },
+  ];
+
+  const components = new ActionRowBuilder().setComponents(
+    mgCities.map((city) =>
+      new ButtonBuilder()
+        .setCustomId(city.buttonId)
+        .setLabel(city.name)
+        .setStyle(ButtonStyle.Primary)
+    )
   );
 
   if (
@@ -184,7 +179,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
     interaction.update({
       ephemeral: true,
       embeds: [embedBH],
-      components: [actionsMG],
+      components: [components],
     });
   }
 });
