@@ -22,9 +22,9 @@ const INTERACTION_IDS = {
   OK_BUTTON: 'btn-1',
   BUTTON_RULES: 'btn-2',
   REGION_BUTTON: 'bt-3',
-  BUTTON_REGIONCPS: 'bt-4',
+  CAPITIES_SELECT_MENU: 'bt-4',
   MG_REGION_BUTTON: 'bt-5',
-  GERAL_REGION_BUTTON: 'bt-6',
+  CAPITIES_BUTTON: 'bt-6',
   BUTTON_MGBH: 'bt-7',
   BUTTON_MGUBI: 'bt-8',
   BUTTON_MGCONT: 'bt-9',
@@ -166,7 +166,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
         .setLabel('Minas Gerais')
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.GERAL_REGION_BUTTON)
+        .setCustomId(INTERACTION_IDS.CAPITIES_BUTTON)
         .setLabel('Outras Capitais')
         .setStyle(ButtonStyle.Secondary)
     );
@@ -214,29 +214,9 @@ bot.on(Events.InteractionCreate, (interaction) => {
 
 // Mensagem Capitais
 bot.on(Events.InteractionCreate, async (interaction) => {
-  const embedCP = new EmbedBuilder()
-    .setColor(0x2f3136)
-    .setTitle(':earth_americas: Escolha sua capital')
-    .setDescription(
-      'Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
-    );
-  const actionsCP = new ActionRowBuilder().setComponents(
-    new StringSelectMenuBuilder()
-      .setPlaceholder('Selecione sua cidade')
-      .setCustomId(INTERACTION_IDS.BUTTON_REGIONCPS)
-      .setMaxValues(1)
-      .addOptions(
-        stateOptions.map((stateOption) => ({
-          label: stateOption.label,
-          description: stateOption.description,
-          value: stateOption.value,
-        }))
-      )
-  );
-
   if (
-    interaction.isStringSelectMenu(actionsCP) &&
-    interaction.customId === INTERACTION_IDS.BUTTON_REGIONCPS
+    interaction.isStringSelectMenu() &&
+    interaction.customId === INTERACTION_IDS.CAPITIES_SELECT_MENU
   ) {
     const valueOption = interaction.values[0];
     const state = stateOptions.find(
@@ -257,12 +237,33 @@ bot.on(Events.InteractionCreate, async (interaction) => {
   if (
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button &&
-    interaction.customId === INTERACTION_IDS.GERAL_REGION_BUTTON
+    interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
   ) {
+    const embed = new EmbedBuilder()
+      .setColor(0x2f3136)
+      .setTitle(':earth_americas: Escolha sua capital')
+      .setDescription(
+        'Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
+      );
+
+    const components = new ActionRowBuilder().setComponents(
+      new StringSelectMenuBuilder()
+        .setPlaceholder('Selecione sua cidade')
+        .setCustomId(INTERACTION_IDS.CAPITIES_SELECT_MENU)
+        .setMaxValues(1)
+        .addOptions(
+          stateOptions.map((stateOption) => ({
+            label: stateOption.label,
+            description: stateOption.description,
+            value: stateOption.value,
+          }))
+        )
+    );
+
     interaction.update({
       ephemeral: true,
-      embeds: [embedCP],
-      components: [actionsCP],
+      embeds: [embed],
+      components: [components],
     });
   }
 });
