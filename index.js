@@ -84,30 +84,30 @@ bot.on(Events.MessageCreate, (message) => {
 bot.on(Events.InteractionCreate, (interaction) => {
   // console.log(interaction);
 
-  const embedR = new EmbedBuilder()
-    .setColor('Blue')
-    .setDescription(
-      '``1`` Não é permitido qualquer tipo de desrespeito, preconceito e toxicidade entre os membros.\n\n``2`` Evite enviar links, mídias e outros conteúdos que fogem do tópico de cada canal.\n\n``3`` Não é permitido enviar mensagens repetidas de forma que polua o chat e atrapalhe a comunicação. Como por exemplo: spam, flood, e entre outros.\n\n``4`` Não permitimos material sexualmente explícito ou nudez. Também não permitimos conteúdos que encaminhem o tráfego a sites comerciais de pornografia.'
-    )
-    .setImage(
-      'https://cdn.discordapp.com/attachments/1065023880042909829/1066101388003774474/regrascruzeiro.png'
-    );
-  const row = new ActionRowBuilder().setComponents(
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_OK)
-      .setLabel('Concordo')
-      .setStyle(ButtonStyle.Success)
-  );
+  const isButton =
+    interaction.type === InteractionType.MessageComponent &&
+    interaction.componentType === ComponentType.Button;
 
   // ir para regras
-  if (
-    interaction.type === InteractionType.MessageComponent &&
-    interaction.componentType === ComponentType.Button &&
-    interaction.customId === INTERACTION_IDS.BUTTON_RULES
-  ) {
+  if (isButton && interaction.customId === INTERACTION_IDS.BUTTON_RULES) {
+    const ruleEmbed = new EmbedBuilder()
+      .setColor('Blue')
+      .setDescription(
+        '``1`` Não é permitido qualquer tipo de desrespeito, preconceito e toxicidade entre os membros.\n\n``2`` Evite enviar links, mídias e outros conteúdos que fogem do tópico de cada canal.\n\n``3`` Não é permitido enviar mensagens repetidas de forma que polua o chat e atrapalhe a comunicação. Como por exemplo: spam, flood, e entre outros.\n\n``4`` Não permitimos material sexualmente explícito ou nudez. Também não permitimos conteúdos que encaminhem o tráfego a sites comerciais de pornografia.'
+      )
+      .setImage(
+        'https://cdn.discordapp.com/attachments/1065023880042909829/1066101388003774474/regrascruzeiro.png'
+      );
+    const row = new ActionRowBuilder().setComponents(
+      new ButtonBuilder()
+        .setCustomId(INTERACTION_IDS.BUTTON_OK)
+        .setLabel('Concordo')
+        .setStyle(ButtonStyle.Success)
+    );
+
     interaction.reply({
       ephemeral: true,
-      embeds: [embedR],
+      embeds: [ruleEmbed],
       components: [row],
     });
   }
