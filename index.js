@@ -53,7 +53,7 @@ const bot = new Client({
 //Mensagen home
 bot.on(Events.MessageCreate, (message) => {
   if (message.content.startsWith('!home')) {
-    const embedH = new EmbedBuilder()
+    const homeEmbed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setDescription(
         '``👋`` Boas vindas ao servidor exclusivo para torcedores do Cruzeiro Esporte Clube. Sinta-se a vontade para trocar ideia com outros torcedores, acompanhar nossas partidas e participar de interações!\n\n``👤`` Sendo um sócio torcedor do Cruzeiro você receberá acesso á #Arquibancada-VIP, uma área exclusiva onde teremos perguntas e watch-partys exclusivas com seus ídolos e afins. Acesse o canal  <#1040356717545930752> para entrar em sua conta.\n\n``📬``No canal <#1040356889352998952> , sinta-se a vontade para auto-atribuir funções de notificações das modalidades que desejar ser notificado.\n\n ``🌎`` Participe de uma área exclusiva de cruzeirensses de onde você mora clicando no ``Sua Região``!'
@@ -75,12 +75,12 @@ bot.on(Events.MessageCreate, (message) => {
     // mensagem de home
     return message.reply({
       components: [actionHome],
-      embeds: [embedH],
+      embeds: [homeEmbed],
     });
   }
 });
 
-//Mensagens pós botão regras
+//Evento que recebe, quando a pessoa clica no botão, interage com select ou executa um slash command
 bot.on(Events.InteractionCreate, (interaction) => {
   // console.log(interaction);
 
