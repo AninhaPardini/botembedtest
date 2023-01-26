@@ -42,6 +42,40 @@ const INTERACTION_IDS = {
   BUTTON_BHAN: 'bt-21',
 };
 
+const stateOptions = [
+  {
+    label: 'São Paulo',
+    description: 'Moro na capital de São Paulo',
+    value: 'SP',
+    roleId: '1067806937984536627',
+  },
+  {
+    label: 'Brasília',
+    description: 'Moro na capital de Goiais',
+    value: 'BSB',
+    roleId: '1067807185322651678',
+  },
+  {
+    label: 'Rio de Janeiro',
+    description: 'Moro na capital de Rio de Janeiro',
+    value: 'RJ',
+    roleId: '1067806988223922226',
+  },
+  {
+    label: 'Porto Alegre',
+    description: 'Moro na capital de Rio Grande do Sul',
+    value: 'PA',
+    roleId: '1067806993542291508',
+  },
+  {
+    roleId: '1068218091860934706',
+
+    label: 'Fortaleza',
+    description: 'Moro na capital de Ceará',
+    value: 'FO',
+  },
+];
+
 const bot = new Client({
   intents: [
     GatewayIntentBits.MessageContent,
@@ -179,13 +213,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
 });
 
 // Mensagem Capitais
-bot.on(Events.InteractionCreate, (interaction) => {
-  let BSB = '1067807185322651678';
-  let FO = '1068218091860934706';
-  let PA = '1067806993542291508';
-  let RJ = '1067806988223922226';
-  let SP = '1067806937984536627';
-
+bot.on(Events.InteractionCreate, async (interaction) => {
   const embedCP = new EmbedBuilder()
     .setColor(0x2f3136)
     .setTitle(':earth_americas: Escolha sua capital')
@@ -198,31 +226,11 @@ bot.on(Events.InteractionCreate, (interaction) => {
       .setCustomId(INTERACTION_IDS.BUTTON_REGIONCPS)
       .setMaxValues(1)
       .addOptions(
-        {
-          label: 'São Paulo',
-          description: 'Moro na capital de São Paulo',
-          value: 'first_option',
-        },
-        {
-          label: 'Brasília',
-          description: 'Moro na capital de Goiais',
-          value: 'second_option',
-        },
-        {
-          label: 'Rio de Janeiro',
-          description: 'Moro na capital de Rio de Janeiro',
-          value: 'third_option',
-        },
-        {
-          label: 'Porto Alegre',
-          description: 'Moro na capital de Rio Grande do Sul',
-          value: 'fourth_option',
-        },
-        {
-          label: 'Fortaleza',
-          description: 'Moro na capital de Ceará',
-          value: 'fifth_option',
-        }
+        stateOptions.map((stateOption) => ({
+          label: stateOption.label,
+          description: stateOption.description,
+          value: stateOption.value,
+        }))
       )
   );
 
@@ -230,27 +238,20 @@ bot.on(Events.InteractionCreate, (interaction) => {
     interaction.isStringSelectMenu(actionsCP) &&
     interaction.customId === INTERACTION_IDS.BUTTON_REGIONCPS
   ) {
-    let ticket = interaction.values[0];
+    const valueOption = interaction.values[0];
+    const state = stateOptions.find(
+      (stateOption) => stateOption.value === valueOption
+    );
 
-    if (ticket === 'Brasília') {
-      membro.roles.add(BSB);
+    if (!state) {
+      return console.error(
+        'state selecionado não foi achado e eu implementei a mensagem para esse caso.'
+      );
     }
 
-    if (ticket === 'Fortaleza') {
-      membro.roles.add(FO);
-    }
-
-    if (ticket === 'Porto Alegre') {
-      membro.roles.add(PA);
-    }
-
-    if (ticket === 'Rio de Janeiro') {
-      membro.roles.add(RJ);
-    }
-
-    if (ticket === 'São Paulo') {
-      membro.roles.add(SP);
-    }
+    await interaction.deferReply({ ephemeral: true });
+    await interaction.member.roles.add(state.roleId);
+    await interaction.editReply(`Cargo de ${state.label} adicionado!`);
   }
 
   if (
