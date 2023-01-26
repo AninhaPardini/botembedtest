@@ -142,14 +142,8 @@ bot.on(Events.InteractionCreate, (interaction) => {
       embeds: [regionEmbed],
       components: [components],
     });
-  }
-});
-
-// Mensagem de Minas Gerais
-bot.on(Events.InteractionCreate, (interaction) => {
-  if (
-    interaction.type === InteractionType.MessageComponent &&
-    interaction.componentType === ComponentType.Button &&
+  } else if (
+    isButton &&
     interaction.customId === INTERACTION_IDS.MG_REGION_BUTTON
   ) {
     const mgEmbed = new EmbedBuilder()
