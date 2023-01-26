@@ -115,7 +115,7 @@ bot.on(Events.MessageCreate, (message) => {
 });
 
 //Evento que recebe, quando a pessoa clica no botão, interage com select ou executa um slash command
-bot.on(Events.InteractionCreate, (interaction) => {
+bot.on(Events.InteractionCreate, async (interaction) => {
   // console.log(interaction);
 
   const isButton =
@@ -209,12 +209,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
       embeds: [mgEmbed],
       components: [components],
     });
-  }
-});
-
-// Mensagem Capitais
-bot.on(Events.InteractionCreate, async (interaction) => {
-  if (
+  } else if (
     interaction.isStringSelectMenu() &&
     interaction.customId === INTERACTION_IDS.CAPITIES_SELECT_MENU
   ) {
@@ -232,11 +227,8 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     await interaction.deferReply({ ephemeral: true });
     await interaction.member.roles.add(state.roleId);
     await interaction.editReply(`Cargo de ${state.label} adicionado!`);
-  }
-
-  if (
-    interaction.type === InteractionType.MessageComponent &&
-    interaction.componentType === ComponentType.Button &&
+  } else if (
+    isButton &&
     interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
   ) {
     const embed = new EmbedBuilder()
