@@ -21,10 +21,10 @@ const {
 const INTERACTION_IDS = {
   OK_BUTTON: 'btn-1',
   BUTTON_RULES: 'btn-2',
-  BUTTON_REGION: 'bt-3',
+  REGION_BUTTON: 'bt-3',
   BUTTON_REGIONCPS: 'bt-4',
-  BUTTON_REGIONMG: 'bt-5',
-  BUTTON_REGIONCP: 'bt-6',
+  MG_REGION_BUTTON: 'bt-5',
+  GERAL_REGION_BUTTON: 'bt-6',
   BUTTON_MGBH: 'bt-7',
   BUTTON_MGUBI: 'bt-8',
   BUTTON_MGCONT: 'bt-9',
@@ -67,7 +67,7 @@ bot.on(Events.MessageCreate, (message) => {
         .setLabel('Regras')
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.BUTTON_REGION)
+        .setCustomId(INTERACTION_IDS.REGION_BUTTON)
         .setLabel('Sua Região')
         .setStyle(ButtonStyle.Secondary)
     );
@@ -116,15 +116,9 @@ bot.on(Events.InteractionCreate, (interaction) => {
       ephemeral: true,
       content: 'Obrigado por entrar em nosso servidor oficial do Cruzeiro!',
     });
-  }
-});
-
-// Escolher a região
-bot.on(Events.InteractionCreate, (interaction) => {
-  if (
-    interaction.type === InteractionType.MessageComponent &&
-    interaction.componentType === ComponentType.Button &&
-    interaction.customId === INTERACTION_IDS.BUTTON_REGION
+  } else if (
+    isButton &&
+    interaction.customId === INTERACTION_IDS.REGION_BUTTON
   ) {
     const regionEmbed = new EmbedBuilder()
       .setColor(0x2f3136)
@@ -134,11 +128,11 @@ bot.on(Events.InteractionCreate, (interaction) => {
       );
     const components = new ActionRowBuilder().setComponents(
       new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.BUTTON_REGIONMG)
+        .setCustomId(INTERACTION_IDS.MG_REGION_BUTTON)
         .setLabel('Minas Gerais')
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.BUTTON_REGIONCP)
+        .setCustomId(INTERACTION_IDS.GERAL_REGION_BUTTON)
         .setLabel('Outras Capitais')
         .setStyle(ButtonStyle.Secondary)
     );
@@ -185,7 +179,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
   if (
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button &&
-    interaction.customId === INTERACTION_IDS.BUTTON_REGIONMG
+    interaction.customId === INTERACTION_IDS.MG_REGION_BUTTON
   ) {
     interaction.update({
       ephemeral: true,
@@ -273,7 +267,7 @@ bot.on(Events.InteractionCreate, (interaction) => {
   if (
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button &&
-    interaction.customId === INTERACTION_IDS.BUTTON_REGIONCP
+    interaction.customId === INTERACTION_IDS.GERAL_REGION_BUTTON
   ) {
     interaction.update({
       ephemeral: true,
