@@ -147,38 +147,38 @@ bot.on(Events.InteractionCreate, (interaction) => {
 
 // Mensagem de Minas Gerais
 bot.on(Events.InteractionCreate, (interaction) => {
-  const embedBH = new EmbedBuilder()
-    .setColor(0x2f3136)
-    .setTitle(':earth_americas: Escolha sua Região')
-    .setDescription(
-      'Então você mora na raiz do nosso time! Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
-    );
-
-  const mgCities = [
-    { buttonId: INTERACTION_IDS.BUTTON_MGBH, name: 'Belo Horizonte' },
-    { buttonId: INTERACTION_IDS.BUTTON_MGUBI, name: 'Ubêrlandia' },
-    { buttonId: INTERACTION_IDS.BUTTON_MGCONT, name: 'Contagem' },
-    { buttonId: INTERACTION_IDS.BUTTON_MGJF, name: 'Juíz de Fora' },
-    { buttonId: INTERACTION_IDS.BUTTON_MGMC, name: 'Montes Claros' },
-  ];
-
-  const components = new ActionRowBuilder().setComponents(
-    mgCities.map((city) =>
-      new ButtonBuilder()
-        .setCustomId(city.buttonId)
-        .setLabel(city.name)
-        .setStyle(ButtonStyle.Primary)
-    )
-  );
-
   if (
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button &&
     interaction.customId === INTERACTION_IDS.MG_REGION_BUTTON
   ) {
+    const mgEmbed = new EmbedBuilder()
+      .setColor(0x2f3136)
+      .setTitle(':earth_americas: Escolha sua Região')
+      .setDescription(
+        'Então você mora na raiz do nosso time! Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
+      );
+
+    const mgCities = [
+      { buttonId: INTERACTION_IDS.BUTTON_MGBH, name: 'Belo Horizonte' },
+      { buttonId: INTERACTION_IDS.BUTTON_MGUBI, name: 'Ubêrlandia' },
+      { buttonId: INTERACTION_IDS.BUTTON_MGCONT, name: 'Contagem' },
+      { buttonId: INTERACTION_IDS.BUTTON_MGJF, name: 'Juíz de Fora' },
+      { buttonId: INTERACTION_IDS.BUTTON_MGMC, name: 'Montes Claros' },
+    ];
+
+    const components = new ActionRowBuilder().setComponents(
+      mgCities.map((city) =>
+        new ButtonBuilder()
+          .setCustomId(city.buttonId)
+          .setLabel(city.name)
+          .setStyle(ButtonStyle.Primary)
+      )
+    );
+
     interaction.update({
       ephemeral: true,
-      embeds: [embedBH],
+      embeds: [mgEmbed],
       components: [components],
     });
   }
