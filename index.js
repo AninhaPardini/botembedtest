@@ -41,6 +41,8 @@ const INTERACTION_IDS = {
   BUTTON_BHCN: 'bt-20',
   BUTTON_BHAN: 'bt-21',
   LINK_BUTTON: 'bt-22',
+  CITIES_SELECT_MENU: 'bt-23',
+  DISTRICT_SELECT_MENU: 'bt-24',
 };
 
 const stateOptions = [
@@ -58,7 +60,8 @@ const stateOptions = [
   },
   {
     label: 'Rio de Janeiro',
-    description: 'Moro na capital de Rio de Janeiro ou reigão',
+    description:
+      'Moro na cCAPITIES_SELECT_MENUapital de Rio de Janeiro ou reigão',
     value: 'RJ',
     roleId: '1067806988223922226',
   },
@@ -79,35 +82,63 @@ const stateOptions = [
 // array de cidade de MG
 const cityOptions = [
   {
+    label: 'Contagem',
+    description: 'Moro na cidade ou região',
+    value: 'CO',
+    roleId: '1067809951734562897',
+  },
+  {
     label: 'Belo Horizonte',
     description: 'Moro na capital de Minas Gerais',
-    value: 'SP',
-    roleId: '1067806937984536627',
+    value: 'BH',
+    roleId: '1068222152089804841',
+    customId: INTERACTION_IDS.BUTTON_MGBH,
   },
   {
-    label: 'Brasília',
-    description: 'Moro na capital de Goiais',
-    value: 'BSB',
-    roleId: '1067807185322651678',
+    label: 'Juíz de Fora',
+    description: 'Moro na cidade ou região',
+    value: 'JF',
+    roleId: '1067809705344381008',
   },
   {
-    label: 'Rio de Janeiro',
-    description: 'Moro na capital de Rio de Janeiro',
-    value: 'RJ',
-    roleId: '1067806988223922226',
+    label: 'Montes Claros',
+    description: 'Moro na cidade ou região',
+    value: 'MOC',
+    roleId: '1067809910500372510',
   },
   {
-    label: 'Porto Alegre',
-    description: 'Moro na capital de Rio Grande do Sul',
-    value: 'PA',
-    roleId: '1067806993542291508',
+    label: 'Ubêrlandia',
+    description: 'Moro na cidade ou região',
+    value: 'UBI',
+    roleId: '1067809831446138950',
   },
-  {
-    roleId: '1068218091860934706',
+];
 
-    label: 'Fortaleza',
-    description: 'Moro na capital de Ceará',
-    value: 'FO',
+const districtOptions = [
+  {
+    label: 'Anchieta',
+    value: 'Anchieta',
+    roleId: '1068221442447122582',
+  },
+  {
+    label: 'Centro',
+    value: 'Centro',
+    roleId: '1068218752254095440',
+  },
+  {
+    label: 'Cidade Nova',
+    value: 'Cidade Nova',
+    roleId: '1067817946476449862',
+  },
+  {
+    label: 'Cruzeiro',
+    value: 'Cruzeiro',
+    roleId: '1067817892005019710',
+  },
+  {
+    label: 'Savassi',
+    value: 'Savassi',
+    roleId: '1068221490832617492',
   },
 ];
 
@@ -181,6 +212,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       components: [row],
     });
   } else if (isButton && interaction.customId === INTERACTION_IDS.OK_BUTTON) {
+    // interação de concordo
     const components = new ActionRowBuilder().setComponents(
       new ButtonBuilder()
         .setCustomId(INTERACTION_IDS.LINK_BUTTON)
@@ -201,6 +233,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     isButton &&
     interaction.customId === INTERACTION_IDS.REGION_BUTTON
   ) {
+    // Ação de escolher sua região com opção de minas gerais ou outras capitais
     const regionEmbed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setTitle(':earth_americas: Escolha sua Região')
@@ -227,6 +260,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     isButton &&
     interaction.customId === INTERACTION_IDS.MG_REGION_BUTTON
   ) {
+    // interação quando é escolhido minas gerais
     const mgEmbed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setTitle(':earth_americas: Escolha sua Região')
@@ -234,50 +268,57 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         'Então você mora na raiz do nosso time! Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
       );
 
-    const mgCities = [
-      { buttonId: INTERACTION_IDS.BUTTON_MGBH, name: 'Belo Horizonte' },
-      { buttonId: INTERACTION_IDS.BUTTON_MGUBI, name: 'Ubêrlandia' },
-      { buttonId: INTERACTION_IDS.BUTTON_MGCONT, name: 'Contagem' },
-      { buttonId: INTERACTION_IDS.BUTTON_MGJF, name: 'Juíz de Fora' },
-      { buttonId: INTERACTION_IDS.BUTTON_MGMC, name: 'Montes Claros' },
-    ];
-
     const components = new ActionRowBuilder().setComponents(
-      mgCities.map((city) =>
-        new ButtonBuilder()
-          .setCustomId(city.buttonId)
-          .setLabel(city.name)
-          .setStyle(ButtonStyle.Primary)
-      )
+      new StringSelectMenuBuilder()
+        .setPlaceholder('Selecione sua cidade')
+        .setCustomId(INTERACTION_IDS.CITIES_SELECT_MENU)
+        .addOptions(
+          cityOptions.map((cityOptions) => ({
+            label: cityOptions.label,
+            description: cityOptions.description,
+            value: cityOptions.value,
+          }))
+        )
     );
 
     interaction.update({
-      ephemeral: true,
+      ephemeral: true,const components = new ActionRowBuilder().setComponents(
+  new StringSelectMenuBuilder()
+    .setPlaceholder('Selecione sua cidade')
+    .setCustomId(INTERACTION_IDS.CAPITIES_SELECT_MENU)
+    .setMaxValues(1)
+    .addOptions( {}
+    )
+);
       embeds: [mgEmbed],
       components: [components],
     });
   } else if (
     interaction.isStringSelectMenu() &&
-    interaction.customId === INTERACTION_IDS.CAPITIES_SELECT_MENU
+    interaction.customId === INTERACTION_IDS.CITIES_SELECT_MENU
   ) {
+    // interação pós escolher a cidade de MInas Gerais
     const valueOption = interaction.values[0];
-    const state = stateOptions.find(
-      (stateOption) => stateOption.value === valueOption
+    const city = cityOptions.find(
+      (cityOption) => cityOption.value === valueOption
     );
 
-    if (!state) {
+    if (!city) {
       return console.error(
-        'state selecionado não foi achado e eu implementei a mensagem para esse caso.'
+        'city selecionado não foi achado e eu implementei a mensagem para esse caso.'
       );
     }
 
     await interaction.deferReply({ ephemeral: true });
-    await interaction.member.roles.add(state.roleId);
-    await interaction.editReply(`Cargo de ${state.label} adicionado!`);
+    await interaction.member.roles.add(city.roleId);
+    await interaction.editReply(
+      `A área da cidade ${city.label} foi adicionada para você!`
+    );
   } else if (
-    isButton &&
+    interaction.isStringSelectMenu() &&
     interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
   ) {
+    // capital
     const embed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setTitle(':earth_americas: Escolha sua capital')
@@ -304,45 +345,51 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       embeds: [embed],
       components: [components],
     });
-  }
-});
-
-// Mensagem do botão "Belo Horizonte"
-bot.on(Events.InteractionCreate, (interaction) => {
-  const embedBHB = new EmbedBuilder()
-    .setColor(0x2f3136)
-    .setTitle(':homes: Escolha o seu Bairro')
-    .setDescription(
-      'Escolha o seu bairro clicando nos botões abaixo, e caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>'
+  } else if (
+    interaction.isStringSelectMenu() &&
+    interaction.customId === INTERACTION_IDS.CAPITIES_SELECT_MENU
+  ) {
+    // interação pós escolher a capital
+    const valueOption = interaction.values[0];
+    const state = stateOptions.find(
+      (stateOption) => stateOption.value === valueOption
     );
-  const actionsBH = new ActionRowBuilder().setComponents(
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_BHAN)
-      .setLabel('Anchieta')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_BHCE)
-      .setLabel('Centro')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_BHCN)
-      .setLabel('Cidade Nova')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_BHCR)
-      .setLabel('Cruzeiro')
-      .setStyle(ButtonStyle.Primary),
-    new ButtonBuilder()
-      .setCustomId(INTERACTION_IDS.BUTTON_BHSA)
-      .setLabel('Savassi')
-      .setStyle(ButtonStyle.Primary)
-  );
 
-  if (
-    interaction.type === InteractionType.MessageComponent &&
-    interaction.componentType === ComponentType.Button &&
+    if (!state) {
+      return console.error(
+        'state selecionado não foi achado e eu implementei a mensagem para esse caso.'
+      );
+    }
+
+    await interaction.deferReply({ ephemeral: true });
+    await interaction.member.roles.add(state.roleId);
+    await interaction.editReply(
+      `A área da cidade ${state.label} foi adicionada para você!`
+    );
+  } else if (
+    isButton === ComponentType.Button &&
     interaction.customId === INTERACTION_IDS.BUTTON_MGBH
   ) {
+    // Mensagem do botão "Belo Horizonte"
+    const embedBHB = new EmbedBuilder()
+      .setColor(0x2f3136)
+      .setTitle(':homes: Escolha o seu Bairro')
+      .setDescription(
+        'Escolha o seu bairro clicando nos botões abaixo, e caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>'
+      );
+    const actionsBH = new ActionRowBuilder().setComponents(
+      new StringSelectMenuBuilder()
+        .setPlaceholder('Selecione seu bairro')
+        .setCustomId(INTERACTION_IDS.DISTRICT_SELECT_MENU)
+        .setMaxValues(1)
+        .addOptions(
+          districtOptions.map((districtOption) => ({
+            label: districtOption.label,
+            value: districtOption.value,
+          }))
+        )
+    );
+
     interaction.update({
       ephemeral: true,
       embeds: [embedBHB],
