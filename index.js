@@ -45,7 +45,7 @@ const INTERACTION_IDS = {
   DISTRICT_SELECT_MENU: 'bt-24',
 };
 
-const stateOptions = require('./data.json');
+const stateOptions = require('./data/capities.json');
 
 // array de cidade de MG
 const cityOptions = [
