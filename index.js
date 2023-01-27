@@ -93,6 +93,38 @@ const cityOptions = [
     value: 'BH',
     roleId: '1068222152089804841',
     customId: INTERACTION_IDS.BUTTON_MGBH,
+    neighborhoods: [
+      {
+        label: 'Anchieta',
+        value: 'Anchieta',
+        roleId: '1068221442447122582',
+        customId: INTERACTION_IDS.SELECT_BHAN,
+      },
+      {
+        label: 'Centro',
+        value: 'Centro',
+        roleId: '1068218752254095440',
+        customId: INTERACTION_IDS.SELECT_BHCE,
+      },
+      {
+        label: 'Cidade Nova',
+        value: 'Cidade Nova',
+        roleId: '1067817946476449862',
+        customId: INTERACTION_IDS.SELECT_BHCN,
+      },
+      {
+        label: 'Cruzeiro',
+        value: 'Cruzeiro',
+        roleId: '1067817892005019710',
+        customId: INTERACTION_IDS.SELECT_BHCR,
+      },
+      {
+        label: 'Savassi',
+        value: 'Savassi',
+        roleId: '1068221490832617492',
+        customId: INTERACTION_IDS.SELECT_BHSA,
+      },
+    ],
   },
   {
     label: 'Juíz de Fora',
@@ -336,7 +368,6 @@ bot.on(Events.InteractionCreate, async (interaction) => {
             label: cityOptions.label,
             description: cityOptions.description,
             value: cityOptions.value,
-            customId: cityOptions.customId,
           }))
         )
     );
@@ -360,7 +391,8 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       return console.error(
         'city selecionado não foi achado e eu implementei a mensagem para esse caso.'
       );
-    } else if (interaction.customId != INTERACTION_IDS.SELECT_MGBH) {
+    } else if (city.customId != INTERACTION_IDS.SELECT_MGBH) {
+      // interaction.customId = CITIES_SELECT_MENU
       await interaction.deferReply({ ephemeral: true });
       await interaction.member.roles.add(city.roleId);
       await interaction.editReply(
