@@ -28,10 +28,10 @@ const updateInteractionWithMgCitiesSelect = (interaction) => {
       .setPlaceholder('Selecione sua cidade')
       .setCustomId(INTERACTION_IDS.MG_REGION_SELECT + ':' + MG_STATE)
       .addOptions(
-        mgCitiesOptions.map((cityOptions) => ({
-          label: cityOptions.label,
-          description: cityOptions.description,
-          value: cityOptions.value,
+        mgCitiesOptions.map((city) => ({
+          label: city.label,
+          description: city.description,
+          value: city.value,
         }))
       )
   );

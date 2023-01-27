@@ -96,9 +96,6 @@ bot.on(Events.MessageCreate, (message) => {
 
 //Evento que recebe, quando a pessoa clica no botão, interage com select ou executa um slash command
 bot.on(Events.InteractionCreate, async (interaction) => {
-  // console.log(interaction);
-
-  console.log(interaction);
   const isButton =
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button;
@@ -122,18 +119,53 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       if (selectedCityInSelect) {
         const selectedValue = interaction.values[0];
         const selectedCity = selectedValue
-          ? mgCitiesOptions.find((city) => (city.value = selectedValue))
+          ? mgCitiesOptions.find((city) => city.value === selectedValue)
           : null;
 
         if (!selectedCity) {
           return updateInteractionWithMgCitiesSelect(interaction);
         }
 
-        await interaction.deferReply({ ephemeral: true });
+        await interaction.deferUpdate({ ephemeral: true });
         await interaction.member.roles.add(selectedCity.roleId);
-        await interaction.editReply(
-          `A área da cidade ${selectedCity.label} foi adicionada para você!`
-        );
+
+        const showNeighborhoodsSelect =
+          selectedCity.neighborhoods && selectedCity.neighborhoods.length > 0;
+
+        if (showNeighborhoodsSelect) {
+          const embed = new EmbedBuilder()
+            .setColor(0x2f3136)
+            .setTitle(':homes: Escolha o seu Bairro')
+            .setDescription(
+              'Escolha o seu bairro clicando nos botões abaixo, e caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>'
+            );
+          const components = new ActionRowBuilder().setComponents(
+            new StringSelectMenuBuilder()
+              .setPlaceholder('Selecione seu bairro')
+              .setCustomId(INTERACTION_IDS.DISTRICT_SELECT_MENU)
+              .setMaxValues(1)
+              .addOptions(
+                selectedCity.neighborhoods.map((districtOption) => ({
+                  label: districtOption.label,
+                  value: districtOption.value,
+                  customId: districtOption.customId,
+                }))
+              )
+          );
+
+          return interaction.editReply({
+            content: `A área da cidade ${selectedCity.label} foi adicionada para você!`,
+
+            embeds: [embed],
+            components: [components],
+          });
+        }
+
+        return await interaction.editReply({
+          content: `A área da cidade ${selectedCity.label} foi adicionada para você!`,
+          embeds: [],
+          components: [],
+        });
       }
     }
   }
@@ -279,36 +311,6 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         `A área da cidade ${city.label} foi adicionada para você!`
       );
     }
-  } else if (
-    interaction.isStringSelectMenu() &&
-    interaction.customId === INTERACTION_IDS.SELECT_MGBH
-  ) {
-    // Mensagem do botão "Belo Horizonte"
-    const embedBHB = new EmbedBuilder()
-      .setColor(0x2f3136)
-      .setTitle(':homes: Escolha o seu Bairro')
-      .setDescription(
-        'Escolha o seu bairro clicando nos botões abaixo, e caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>'
-      );
-    const actionsBH = new ActionRowBuilder().setComponents(
-      new StringSelectMenuBuilder()
-        .setPlaceholder('Selecione seu bairro')
-        .setCustomId(INTERACTION_IDS.DISTRICT_SELECT_MENU)
-        .setMaxValues(1)
-        .addOptions(
-          districtOptions.map((districtOption) => ({
-            label: districtOption.label,
-            value: districtOption.value,
-            customId: districtOption.customId,
-          }))
-        )
-    );
-
-    interaction.update({
-      ephemeral: true,
-      embeds: [embedBHB],
-      components: [actionsBH],
-    });
   }
 });
 
