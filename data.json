@@ -7,25 +7,25 @@
    },
    {
       "label":"Brasília",
-      "description":"Moro no Distrito Federal ou reigão",
+      "description":"Moro no Distrito Federal ou região",
       "value":"BSB",
       "roleId":"1067807185322651678"
    },
    {
       "label":"Rio de Janeiro",
-      "description":"Moro na capital de Rio de Janeiro ou reigão",
+      "description":"Moro na capital de Rio de Janeiro ou região",
       "value":"RJ",
       "roleId":"1067806988223922226"
    },
    {
       "label":"Porto Alegre",
-      "description":"Moro na capital de Rio Grande do Sul ou reigão",
+      "description":"Moro na capital de Rio Grande do Sul ou região",
       "value":"PA",
       "roleId":"1067806993542291508"
    },
    {
       "label":"Fortaleza",
-      "description":"Moro na capital de Ceará ou reigão",
+      "description":"Moro na capital de Ceará ou região",
       "value":"FO",
       "roleId":"1068218091860934706"
    }
