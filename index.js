@@ -18,10 +18,12 @@ const {
 } = require('discord.js');
 
 // Ids dos botões
-const { INTERACTION_IDS, MG_STATE } = require('./constants');
-const { updateInteractionWithMgCitiesSelect } = require('./mg-interactions');
-const capitiesOptions = require('./data/capities.json');
-const mgCitiesOptions = require('./data/mg-cities.json');
+const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
+const {
+  updateInteractionWithMgCitiesSelect,
+} = require('./src/mg-interactions');
+const capitiesOptions = require('./src/data/capities.json');
+const mgCitiesOptions = require('./src/data/mg-cities.json');
 
 const districtOptions = [
   {
@@ -107,7 +109,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       const city = cityId
         ? mgCitiesOptions.find((mgCity) => mgCity.value === cityId)
         : null;
-      console.log(interaction, city);
+
       const shouldShowCitySelect = !city && interaction.isButton();
 
       if (shouldShowCitySelect) {
