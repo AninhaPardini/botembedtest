@@ -45,7 +45,7 @@ const INTERACTION_IDS = {
   DISTRICT_SELECT_MENU: 'bt-24',
 };
 
-const stateOptions = require('./data/capities.json');
+const capitiesOptions = require('./data/capities.json');
 
 // array de cidade de MG
 const cityOptions = [
@@ -250,7 +250,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         .setCustomId(INTERACTION_IDS.CAPITIES_SELECT_MENU)
         .setMaxValues(1)
         .addOptions(
-          stateOptions.map((stateOption) => ({
+          capitiesOptions.map((stateOption) => ({
             label: stateOption.label,
             description: stateOption.description,
             value: stateOption.value,
@@ -269,7 +269,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
   ) {
     // interação pós escolher a capital
     const valueOption = interaction.values[0];
-    const state = stateOptions.find(
+    const state = capitiesOptions.find(
       (stateOption) => stateOption.value === valueOption
     );
 
