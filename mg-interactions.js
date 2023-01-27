@@ -2,7 +2,7 @@ const {
   ActionRowBuilder,
   StringSelectMenuBuilder,
 } = require('@discordjs/builders');
-const { INTERACTION_IDS } = require('./constants');
+const { INTERACTION_IDS, MG_STATE } = require('./constants');
 const {
   GatewayIntentBits,
   Events,
@@ -26,7 +26,7 @@ const updateInteractionWithMgCitiesSelect = (interaction) => {
   const components = new ActionRowBuilder().setComponents(
     new StringSelectMenuBuilder()
       .setPlaceholder('Selecione sua cidade')
-      .setCustomId(INTERACTION_IDS.CITIES_SELECT_MENU)
+      .setCustomId(INTERACTION_IDS.MG_REGION_SELECT + ':' + MG_STATE)
       .addOptions(
         mgCitiesOptions.map((cityOptions) => ({
           label: cityOptions.label,

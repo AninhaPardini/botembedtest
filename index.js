@@ -17,10 +17,8 @@ const {
   MessageManager,
 } = require('discord.js');
 
-const MG_STATE = 'MG';
-
 // Ids dos botões
-const { INTERACTION_IDS } = require('./constants');
+const { INTERACTION_IDS, MG_STATE } = require('./constants');
 const { updateInteractionWithMgCitiesSelect } = require('./mg-interactions');
 const capitiesOptions = require('./data/capities.json');
 const mgCitiesOptions = require('./data/mg-cities.json');
@@ -100,6 +98,7 @@ bot.on(Events.MessageCreate, (message) => {
 bot.on(Events.InteractionCreate, async (interaction) => {
   // console.log(interaction);
 
+  console.log(interaction);
   const isButton =
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button;
@@ -112,8 +111,29 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         ? mgCitiesOptions.find((mgCity) => mgCity.value)
         : null;
 
-      if (!city) {
+      const shouldShowCitySelect = !city && interaction.isButton();
+
+      if (shouldShowCitySelect) {
         return updateInteractionWithMgCitiesSelect(interaction);
+      }
+
+      const selectedCityInSelect = !city && interaction.isStringSelectMenu();
+
+      if (selectedCityInSelect) {
+        const selectedValue = interaction.values[0];
+        const selectedCity = selectedValue
+          ? mgCitiesOptions.find((city) => (city.value = selectedValue))
+          : null;
+
+        if (!selectedCity) {
+          return updateInteractionWithMgCitiesSelect(interaction);
+        }
+
+        await interaction.deferReply({ ephemeral: true });
+        await interaction.member.roles.add(selectedCity.roleId);
+        await interaction.editReply(
+          `A área da cidade ${selectedCity.label} foi adicionada para você!`
+        );
       }
     }
   }

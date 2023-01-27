@@ -26,4 +26,6 @@ const INTERACTION_IDS = {
   DISTRICT_SELECT_MENU: 'bt-24',
 };
 
-module.exports = { INTERACTION_IDS };
+const MG_STATE = 'MG';
+
+module.exports = { INTERACTION_IDS, MG_STATE };
