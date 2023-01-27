@@ -11,7 +11,39 @@
       "description":"Moro na capital de Minas Gerais",
       "value":"BH",
       "roleId":"1068222152089804841",
-      "customId":"INTERACTION_IDS.BUTTON_MGBH"
+      "customId":"INTERACTION_IDS.BUTTON_MGBH",
+      "neighborhoods":[
+         {
+            "label":"Anchieta",
+            "value":"Anchieta",
+            "roleId":"1068221442447122582",
+            "customId":"INTERACTION_IDS.SELECT_BHAN"
+         },
+         {
+            "label":"Centro",
+            "value":"Centro",
+            "roleId":"1068218752254095440",
+            "customId":"INTERACTION_IDS.SELECT_BHCE"
+         },
+         {
+            "label":"Cidade Nova",
+            "value":"Cidade Nova",
+            "roleId":"1067817946476449862",
+            "customId":"INTERACTION_IDS.SELECT_BHCN"
+         },
+         {
+            "label":"Cruzeiro",
+            "value":"Cruzeiro",
+            "roleId":"1067817892005019710",
+            "customId":"INTERACTION_IDS.SELECT_BHCR"
+         },
+         {
+            "label":"Savassi",
+            "value":"Savassi",
+            "roleId":"1068221490832617492",
+            "customId":"INTERACTION_IDS.SELECT_BHSA"
+         }
+      ]
    },
    {
       "label":"Juíz de Fora",

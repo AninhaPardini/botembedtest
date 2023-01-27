@@ -17,38 +17,13 @@ const {
   MessageManager,
 } = require('discord.js');
 
+const MG_STATE = 'MG';
+
 // Ids dos botões
-const INTERACTION_IDS = {
-  OK_BUTTON: 'btn-1',
-  BUTTON_RULES: 'btn-2',
-  REGION_BUTTON: 'bt-3',
-  CAPITIES_SELECT_MENU: 'bt-4',
-  MG_REGION_BUTTON: 'bt-5',
-  CAPITIES_BUTTON: 'bt-6',
-  SELECT_MGBH: 'bt-7',
-  SELECT_MGUBI: 'bt-8',
-  SELECT_MGCON: 'bt-9',
-  SELECT_MGJF: 'bt-10',
-  SELECT_MGMOC: 'bt-11',
-  SELECT_CAPSP: 'bt-12',
-  SELECT_CAPBSB: 'bt-13',
-  SELECT_CAPPA: 'bt-14',
-  SELECT_CAPRJ: 'bt-15',
-  SELECT_CAPFO: 'bt-16',
-  SELECT_BHCR: 'bt-17',
-  SELECT_BHCE: 'bt-18',
-  SELECT_BHSA: 'bt-19',
-  SELECT_BHCN: 'bt-20',
-  SELECT_BHAN: 'bt-21',
-  LINK_BUTTON: 'bt-22',
-  CITIES_SELECT_MENU: 'bt-23',
-  DISTRICT_SELECT_MENU: 'bt-24',
-};
-
+const { INTERACTION_IDS } = require('./constants');
+const { updateInteractionWithMgCitiesSelect } = require('./mg-interactions');
 const capitiesOptions = require('./data/capities.json');
-
-// array de cidade de MG
-const cityOptions = require('./data/mg-cities.json');
+const mgCitiesOptions = require('./data/mg-cities.json');
 
 const districtOptions = [
   {
@@ -129,6 +104,20 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button;
 
+  if (interaction.customId.startsWith(INTERACTION_IDS.MG_REGION_SELECT)) {
+    const [_prefix, stateId, cityId] = interaction.customId.split(':'); // ["select-role", "{state}", "{?city}"]
+
+    if (stateId === MG_STATE) {
+      const city = cityId
+        ? mgCitiesOptions.find((mgCity) => mgCity.value)
+        : null;
+
+      if (!city) {
+        return updateInteractionWithMgCitiesSelect(interaction);
+      }
+    }
+  }
+
   // ir para regras
   if (isButton && interaction.customId === INTERACTION_IDS.BUTTON_RULES) {
     const ruleEmbed = new EmbedBuilder()
@@ -182,7 +171,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       );
     const components = new ActionRowBuilder().setComponents(
       new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.MG_REGION_BUTTON)
+        .setCustomId(INTERACTION_IDS.MG_REGION_SELECT + ':' + MG_STATE)
         .setLabel('Minas Gerais')
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
@@ -265,7 +254,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         .setPlaceholder('Selecione sua cidade')
         .setCustomId(INTERACTION_IDS.CITIES_SELECT_MENU)
         .addOptions(
-          cityOptions.map((cityOptions) => ({
+          mgCitiesOptions.map((cityOptions) => ({
             label: cityOptions.label,
             description: cityOptions.description,
             value: cityOptions.value,
@@ -284,7 +273,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
   ) {
     // interação pós escolher a cidade de MInas Gerais
     const valueOption = interaction.values[0];
-    const city = cityOptions.find(
+    const city = mgCitiesOptions.find(
       (cityOption) => cityOption.value === valueOption
     );
 
