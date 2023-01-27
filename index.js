@@ -105,9 +105,9 @@ bot.on(Events.InteractionCreate, async (interaction) => {
 
     if (stateId === MG_STATE) {
       const city = cityId
-        ? mgCitiesOptions.find((mgCity) => mgCity.value)
+        ? mgCitiesOptions.find((mgCity) => mgCity.value === cityId)
         : null;
-
+      console.log(interaction, city);
       const shouldShowCitySelect = !city && interaction.isButton();
 
       if (shouldShowCitySelect) {
@@ -139,10 +139,18 @@ bot.on(Events.InteractionCreate, async (interaction) => {
             .setDescription(
               'Escolha o seu bairro clicando nos botões abaixo, e caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>'
             );
+
+          const selectId =
+            INTERACTION_IDS.MG_REGION_SELECT +
+            ':' +
+            MG_STATE +
+            ':' +
+            selectedCity.value;
+
           const components = new ActionRowBuilder().setComponents(
             new StringSelectMenuBuilder()
               .setPlaceholder('Selecione seu bairro')
-              .setCustomId(INTERACTION_IDS.DISTRICT_SELECT_MENU)
+              .setCustomId(selectId)
               .setMaxValues(1)
               .addOptions(
                 selectedCity.neighborhoods.map((districtOption) => ({
@@ -166,6 +174,29 @@ bot.on(Events.InteractionCreate, async (interaction) => {
           embeds: [],
           components: [],
         });
+      }
+
+      const isNeighborhoodSelect =
+        city.neighborhoods &&
+        city.neighborhoods.length > 0 &&
+        interaction.isStringSelectMenu();
+
+      if (isNeighborhoodSelect) {
+        const selectedValue = interaction.values[0];
+
+        const selectedNeighborhood = city.neighborhoods.find(
+          (neighborhood) => neighborhood.value === selectedValue
+        );
+
+        if (selectedNeighborhood) {
+          await interaction.deferUpdate({ ephemeral: true });
+          await interaction.member.roles.add(selectedNeighborhood.roleId);
+          return await interaction.editReply({
+            content: `A área do bairro ${selectedNeighborhood.label} foi adicionada para você!`,
+            embeds: [],
+            components: [],
+          });
+        }
       }
     }
   }
