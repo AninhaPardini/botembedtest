@@ -4,21 +4,9 @@
   "main": "index.js",
   "dependencies": {
     "discord.js": "^14.7.1",
-    "dotenv": "^16.0.3",
-    "fs": "^0.0.1-security"
+    "dotenv": "^16.0.3"
   },
-  "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
-  },
-  "repository": {
-    "type": "git",
-    "url": "git+ssh://git@github.com/AninhaPardini/botembedtest.git"
-  },
-  "author": "AninhaPardini",
-  "license": "ISC",
-  "bugs": {
-    "url": "https://github.com/AninhaPardini/botembedtest/issues"
-  },
-  "homepage": "https://github.com/AninhaPardini/botembedtest#readme",
-  "description": ""
+  "engines": {
+    "node": ">=16.18"
+  }
 }
