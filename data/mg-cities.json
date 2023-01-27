@@ -1,0 +1,37 @@
+[
+   {
+      "label":"Contagem",
+      "description":"Moro na cidade ou região",
+      "value":"CO",
+      "roleId":"1067809951734562897",
+      "customId":"INTERACTION_IDS.SELECT_MGCON"
+   },
+   {
+      "label":"Belo Horizonte",
+      "description":"Moro na capital de Minas Gerais",
+      "value":"BH",
+      "roleId":"1068222152089804841",
+      "customId":"INTERACTION_IDS.BUTTON_MGBH"
+   },
+   {
+      "label":"Juíz de Fora",
+      "description":"Moro na cidade ou região",
+      "value":"JF",
+      "roleId":"1067809705344381008",
+      "customId":"INTERACTION_IDS.SELECT_MGJF"
+   },
+   {
+      "label":"Montes Claros",
+      "description":"Moro na cidade ou região",
+      "value":"MOC",
+      "roleId":"1067809910500372510",
+      "customId":"INTERACTION_IDS.SELECT_MGMOC"
+   },
+   {
+      "label":"Ubêrlandia",
+      "description":"Moro na cidade ou região",
+      "value":"UBI",
+      "roleId":"1067809831446138950",
+      "customId":"INTERACTION_IDS.SELECT_MGUBI"
+   }
+]
