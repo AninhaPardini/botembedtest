@@ -25,39 +25,6 @@ const {
 const capitiesOptions = require('./src/data/capities.json');
 const mgCitiesOptions = require('./src/data/mg-cities.json');
 
-const districtOptions = [
-  {
-    label: 'Anchieta',
-    value: 'Anchieta',
-    roleId: '1068221442447122582',
-    customId: INTERACTION_IDS.SELECT_BHAN,
-  },
-  {
-    label: 'Centro',
-    value: 'Centro',
-    roleId: '1068218752254095440',
-    customId: INTERACTION_IDS.SELECT_BHCE,
-  },
-  {
-    label: 'Cidade Nova',
-    value: 'Cidade Nova',
-    roleId: '1067817946476449862',
-    customId: INTERACTION_IDS.SELECT_BHCN,
-  },
-  {
-    label: 'Cruzeiro',
-    value: 'Cruzeiro',
-    roleId: '1067817892005019710',
-    customId: INTERACTION_IDS.SELECT_BHCR,
-  },
-  {
-    label: 'Savassi',
-    value: 'Savassi',
-    roleId: '1068221490832617492',
-    customId: INTERACTION_IDS.SELECT_BHSA,
-  },
-];
-
 const bot = new Client({
   intents: [
     GatewayIntentBits.MessageContent,
