@@ -45,38 +45,7 @@ const INTERACTION_IDS = {
   DISTRICT_SELECT_MENU: 'bt-24',
 };
 
-const stateOptions = [
-  {
-    label: 'São Paulo',
-    description: 'Moro na capital de São Paulo ou região',
-    value: 'SP',
-    roleId: '1067806937984536627',
-  },
-  {
-    label: 'Brasília',
-    description: 'Moro no Distrito Federal ou reigão',
-    value: 'BSB',
-    roleId: '1067807185322651678',
-  },
-  {
-    label: 'Rio de Janeiro',
-    description: 'Moro na capital de Rio de Janeiro ou reigão',
-    value: 'RJ',
-    roleId: '1067806988223922226',
-  },
-  {
-    label: 'Porto Alegre',
-    description: 'Moro na capital de Rio Grande do Sul ou reigão',
-    value: 'PA',
-    roleId: '1067806993542291508',
-  },
-  {
-    label: 'Fortaleza',
-    description: 'Moro na capital de Ceará ou reigão',
-    value: 'FO',
-    roleId: '1068218091860934706',
-  },
-];
+const stateOptions = require('./data.json');
 
 // array de cidade de MG
 const cityOptions = [
@@ -93,38 +62,6 @@ const cityOptions = [
     value: 'BH',
     roleId: '1068222152089804841',
     customId: INTERACTION_IDS.BUTTON_MGBH,
-    neighborhoods: [
-      {
-        label: 'Anchieta',
-        value: 'Anchieta',
-        roleId: '1068221442447122582',
-        customId: INTERACTION_IDS.SELECT_BHAN,
-      },
-      {
-        label: 'Centro',
-        value: 'Centro',
-        roleId: '1068218752254095440',
-        customId: INTERACTION_IDS.SELECT_BHCE,
-      },
-      {
-        label: 'Cidade Nova',
-        value: 'Cidade Nova',
-        roleId: '1067817946476449862',
-        customId: INTERACTION_IDS.SELECT_BHCN,
-      },
-      {
-        label: 'Cruzeiro',
-        value: 'Cruzeiro',
-        roleId: '1067817892005019710',
-        customId: INTERACTION_IDS.SELECT_BHCR,
-      },
-      {
-        label: 'Savassi',
-        value: 'Savassi',
-        roleId: '1068221490832617492',
-        customId: INTERACTION_IDS.SELECT_BHSA,
-      },
-    ],
   },
   {
     label: 'Juíz de Fora',
