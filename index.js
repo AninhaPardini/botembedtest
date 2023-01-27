@@ -40,12 +40,47 @@ const INTERACTION_IDS = {
   BUTTON_BHSA: 'bt-19',
   BUTTON_BHCN: 'bt-20',
   BUTTON_BHAN: 'bt-21',
+  LINK_BUTTON: 'bt-22',
 };
 
 const stateOptions = [
   {
     label: 'São Paulo',
-    description: 'Moro na capital de São Paulo',
+    description: 'Moro na capital de São Paulo ou região',
+    value: 'SP',
+    roleId: '1067806937984536627',
+  },
+  {
+    label: 'Brasília',
+    description: 'Moro no Distrito Federal ou reigão',
+    value: 'BSB',
+    roleId: '1067807185322651678',
+  },
+  {
+    label: 'Rio de Janeiro',
+    description: 'Moro na capital de Rio de Janeiro ou reigão',
+    value: 'RJ',
+    roleId: '1067806988223922226',
+  },
+  {
+    label: 'Porto Alegre',
+    description: 'Moro na capital de Rio Grande do Sul ou reigão',
+    value: 'PA',
+    roleId: '1067806993542291508',
+  },
+  {
+    label: 'Fortaleza',
+    description: 'Moro na capital de Ceará ou reigão',
+    value: 'FO',
+    roleId: '1068218091860934706',
+  },
+];
+
+// array de cidade de MG
+const cityOptions = [
+  {
+    label: 'Belo Horizonte',
+    description: 'Moro na capital de Minas Gerais',
     value: 'SP',
     roleId: '1067806937984536627',
   },
@@ -90,7 +125,7 @@ bot.on(Events.MessageCreate, (message) => {
     const homeEmbed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setDescription(
-        '``👋`` Boas vindas ao servidor exclusivo para torcedores do Cruzeiro Esporte Clube. Sinta-se a vontade para trocar ideia com outros torcedores, acompanhar nossas partidas e participar de interações!\n\n``👤`` Sendo um sócio torcedor do Cruzeiro você receberá acesso á #Arquibancada-VIP, uma área exclusiva onde teremos perguntas e watch-partys exclusivas com seus ídolos e afins. Acesse o canal  <#1040356717545930752> para entrar em sua conta.\n\n``📬``No canal <#1040356889352998952> , sinta-se a vontade para auto-atribuir funções de notificações das modalidades que desejar ser notificado.\n\n ``🌎`` Participe de uma área exclusiva de cruzeirensses de onde você mora clicando no ``Sua Região``!'
+        '``👋`` Boas vindas ao servidor exclusivo para torcedores do Cruzeiro Esporte Clube. Sinta-se a vontade para trocar ideia com outros torcedores, acompanhar nossas partidas e participar de interações!\n\n``👤`` Sendo um sócio torcedor do Cruzeiro você receberá acesso á #Arquibancada-VIP, uma área exclusiva onde teremos perguntas e watch-partys exclusivas com seus ídolos e afins. Acesse o canal  <#1040356717545930752> para entrar em sua conta.\n\n``📬``No canal <#1040356889352998952> , sinta-se a vontade para auto-atribuir funções de notificações das modalidades que desejar ser notificado.\n\n ``🌎`` **Participe de uma área exclusiva de cruzeirensses de onde você mora clicando no** ``Sua Região``!'
       )
       .setImage(
         'https://cdn.discordapp.com/attachments/1040357924133949501/1062822427224195194/boasvindascruzeiro.png'
@@ -146,9 +181,21 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       components: [row],
     });
   } else if (isButton && interaction.customId === INTERACTION_IDS.OK_BUTTON) {
+    const components = new ActionRowBuilder().setComponents(
+      new ButtonBuilder()
+        .setCustomId(INTERACTION_IDS.LINK_BUTTON)
+        .setLabel('Faça seu login')
+        .setStyle(ButtonStyle.Link)
+        .setURL(
+          'https://discord.com/channels/1040355324374306957/1040356717545930752'
+        )
+    );
+
     interaction.reply({
       ephemeral: true,
-      content: 'Obrigado por entrar em nosso servidor oficial do Cruzeiro!',
+      content:
+        'Obrigado por entrar em nosso servidor oficial do Cruzeiro!\n\nE não esqueça de fazer seu login caso seja socio torcedor!',
+      components: [components],
     });
   } else if (
     isButton &&
@@ -259,12 +306,6 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     });
   }
 });
-
-// Mensagem do select São Paulo
-// Mensagem do select Rio de Janeiro
-// Mensagem do select Brasília
-// Mensagem do select Porto Alegre
-// Mensagem do select Fortaleza
 
 // Mensagem do botão "Belo Horizonte"
 bot.on(Events.InteractionCreate, (interaction) => {
