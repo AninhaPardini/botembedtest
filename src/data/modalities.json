@@ -1,0 +1,26 @@
+[
+    {
+        "label" : "Futebol",
+        "description" : "Futebol",
+        "value" : "FUT",
+        "roleId" : "1045387031179690135",
+        
+        "emoji" : ":soccer:"
+    },
+    {
+        "label" : "Basquete",
+        "description" : "Basquete",
+        "value" : "BAS",
+        "roleId" : "1045386918482952202",
+        
+        "emoji" : ":basketball:"
+    },
+    {
+        "label" : "Volei",
+        "description" : "Volei",
+        "value" : "VOL",
+        "roleId" : "1045387083100995695",
+        
+        "emoji" : ":volleyball:"
+    }
+]

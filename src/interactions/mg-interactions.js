@@ -2,7 +2,7 @@ const {
   ActionRowBuilder,
   StringSelectMenuBuilder,
 } = require('@discordjs/builders');
-const { INTERACTION_IDS, MG_STATE } = require('./constants');
+const { INTERACTION_IDS, MG_STATE } = require('../constants');
 const {
   GatewayIntentBits,
   Events,
@@ -13,7 +13,7 @@ const {
   MessageManager,
 } = require('discord.js');
 
-const mgCitiesOptions = require('./data/mg-cities.json');
+const mgCitiesOptions = require('../data/mg-cities.json');
 
 const updateInteractionWithMgCitiesSelect = (interaction) => {
   const embed = new EmbedBuilder()

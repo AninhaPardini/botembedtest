@@ -6,6 +6,11 @@ const {
 } = require('@discordjs/builders');
 const { ButtonStyle } = require('discord.js');
 
+/**
+ * Sends a message to the channel that the user is in with a list of buttons that the user can click on.
+ * @param {Message} message - the message that the user sent to the bot.
+ * @returns Embed message
+ */
 const sendRegion = (message) => {
   if (message.content.startsWith('!regiao')) {
     const embed = new EmbedBuilder()

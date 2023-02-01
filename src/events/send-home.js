@@ -6,6 +6,11 @@ const {
 const { ButtonStyle } = require('discord.js');
 const { INTERACTION_IDS } = require('../constants');
 
+/**
+ * Send a message to the user that write !home them to the server.
+ * @param {Message} message - The message that triggered the command.
+ * @returns Embed message
+ */
 const sendHome = (message) => {
   if (message.content.startsWith('!home')) {
     const homeEmbed = new EmbedBuilder()

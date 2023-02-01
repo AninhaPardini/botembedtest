@@ -26,6 +26,10 @@ const INTERACTION_IDS = {
   DISTRICT_SELECT_MENU: 'bt-24',
   SPORT_BUTTON: 'bt-25',
   LOGIN_BUTTON: 'bt-26',
+  NOTIFY_SELECT_MENU: 'select-role2',
+  SELECT_BASKET: 'bt-27',
+  SELECT_FOTBALL: 'bt-28',
+  SELECT_VOLLEY: 'bt-29',
 };
 
 const MG_STATE = 'MG';

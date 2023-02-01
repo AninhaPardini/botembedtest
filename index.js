@@ -17,16 +17,21 @@ const {
   MessageManager,
 } = require('discord.js');
 
+//
 const { sendHome } = require('./src/events/send-home');
+const { sendNotify } = require('./src/events/send-notify');
+const { sendRegion } = require('./src/events/send-region');
 
 // Ids dos botões
 const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
 const {
   updateInteractionWithMgCitiesSelect,
-} = require('./src/mg-interactions');
+} = require('./src/interactions/mg-interactions');
+
+// array de dados
 const capitiesOptions = require('./src/data/capities.json');
 const mgCitiesOptions = require('./src/data/mg-cities.json');
-const { sendRegiao } = require('./src/events/send-region');
+const modalities = require('./src/data/modalities.json');
 
 const bot = new Client({
   intents: [
@@ -40,6 +45,7 @@ const bot = new Client({
 bot.on(Events.MessageCreate, (message) => {
   sendHome(message);
   sendRegion(message);
+  sendNotify(message);
 });
 
 //Evento que recebe, quando a pessoa clica no botão, interage com select ou executa um slash command
@@ -173,6 +179,54 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       embeds: [regionEmbed],
       components: [components],
     });
+  } else if (
+    isButton &&
+    interaction.customId === INTERACTION_IDS.SPORT_BUTTON
+  ) {
+    const embed = new EmbedBuilder()
+      .setColor(0x2f3136)
+      .setTitle(':bell: Escolha sobre o que você gosta para ser notificado!')
+      .setDescription(
+        '**Selecione** a modalidade que corresponde ao **esporte** que você gosta de acompanhar do **nosso time** e fique por dentro de tudo que acontece!'
+      );
+    const components = new ActionRowBuilder().setComponents(
+      new StringSelectMenuBuilder()
+        .setPlaceholder('Selecione a modalidade')
+        .setCustomId(INTERACTION_IDS.NOTIFY_SELECT_MENU)
+        .setMinValues(1)
+        .addOptions(
+          modalities.map((modalityOptions) => ({
+            label: modalityOptions.label,
+            value: modalityOptions.value,
+          }))
+        )
+    );
+
+    return interaction.reply({
+      ephemeral: true,
+      embeds: [embed],
+      components: [components],
+    });
+  } else if (
+    interaction.isStringSelectMenu() &&
+    interaction.customId === INTERACTION_IDS.NOTIFY_SELECT_MENU
+  ) {
+    const valueOption = interaction.values[0];
+    const modality = modalities.find(
+      (modalityOptions) => modalityOptions.value === valueOption
+    );
+
+    if (!modality) {
+      return console.error(
+        'modality selecionado não foi achado e eu implementei a mensagem para esse caso.'
+      );
+    }
+
+    await interaction.deferReply({ ephemeral: true });
+    await interaction.member.roles.add(modality.roleId);
+    await interaction.editReply(
+      `:white_check_mark: A notificação do esporte ${modality.label} foi adicionado para você!`
+    );
   } else if (
     isButton &&
     interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
