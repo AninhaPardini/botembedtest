@@ -24,6 +24,8 @@ const INTERACTION_IDS = {
   LINK_BUTTON: 'bt-22',
   CITIES_SELECT_MENU: 'bt-23',
   DISTRICT_SELECT_MENU: 'bt-24',
+  SPORT_BUTTON: 'bt-25',
+  LOGIN_BUTTON: 'bt-26',
 };
 
 const MG_STATE = 'MG';

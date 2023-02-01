@@ -20,7 +20,7 @@ const updateInteractionWithMgCitiesSelect = (interaction) => {
     .setColor(0x2f3136)
     .setTitle(':earth_americas: Escolha sua Região')
     .setDescription(
-      'Então você mora na raiz do nosso time! Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
+      'Então você mora na raiz do nosso time! **Selecione abaixo** se houver a opção da sua cidade.\n\n*Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!*'
     );
 
   const components = new ActionRowBuilder().setComponents(
@@ -36,7 +36,7 @@ const updateInteractionWithMgCitiesSelect = (interaction) => {
       )
   );
 
-  interaction.update({
+  interaction.reply({
     ephemeral: true,
     embeds: [embed],
     components: [components],

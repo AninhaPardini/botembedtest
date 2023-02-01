@@ -17,6 +17,8 @@ const {
   MessageManager,
 } = require('discord.js');
 
+const { sendHome } = require('./src/events/send-home');
+
 // Ids dos botões
 const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
 const {
@@ -24,6 +26,7 @@ const {
 } = require('./src/mg-interactions');
 const capitiesOptions = require('./src/data/capities.json');
 const mgCitiesOptions = require('./src/data/mg-cities.json');
+const { sendRegiao } = require('./src/events/send-region');
 
 const bot = new Client({
   intents: [
@@ -33,34 +36,10 @@ const bot = new Client({
   ],
 });
 
-//Mensagen home
+//Mensagem home
 bot.on(Events.MessageCreate, (message) => {
-  if (message.content.startsWith('!home')) {
-    const homeEmbed = new EmbedBuilder()
-      .setColor(0x2f3136)
-      .setDescription(
-        '``👋`` Boas vindas ao servidor exclusivo para torcedores do Cruzeiro Esporte Clube. Sinta-se a vontade para trocar ideia com outros torcedores, acompanhar nossas partidas e participar de interações!\n\n``👤`` Sendo um sócio torcedor do Cruzeiro você receberá acesso á #Arquibancada-VIP, uma área exclusiva onde teremos perguntas e watch-partys exclusivas com seus ídolos e afins. Acesse o canal  <#1040356717545930752> para entrar em sua conta.\n\n``📬``No canal <#1040356889352998952> , sinta-se a vontade para auto-atribuir funções de notificações das modalidades que desejar ser notificado.\n\n ``🌎`` **Participe de uma área exclusiva de cruzeirensses de onde você mora clicando no** ``Sua Região``!'
-      )
-      .setImage(
-        'https://cdn.discordapp.com/attachments/1040357924133949501/1062822427224195194/boasvindascruzeiro.png'
-      );
-    const actionHome = new ActionRowBuilder().setComponents(
-      new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.BUTTON_RULES)
-        .setLabel('Regras')
-        .setStyle(ButtonStyle.Primary),
-      new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.REGION_BUTTON)
-        .setLabel('Sua Região')
-        .setStyle(ButtonStyle.Secondary)
-    );
-
-    // mensagem de home
-    return message.reply({
-      components: [actionHome],
-      embeds: [homeEmbed],
-    });
-  }
+  sendHome(message);
+  sendRegion(message);
 });
 
 //Evento que recebe, quando a pessoa clica no botão, interage com select ou executa um slash command
@@ -106,7 +85,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
             .setColor(0x2f3136)
             .setTitle(':homes: Escolha o seu Bairro')
             .setDescription(
-              'Escolha o seu bairro clicando nos botões abaixo, e caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>'
+              '**Escolha** o seu bairro clicando nos **botões** abaixo!\n\n*Caso ele não esteja, não esquenta, é só pedir para criar uma área para ele mandando mensagem no <#1040370984613584959>*'
             );
 
           const selectId =
@@ -131,7 +110,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
           );
 
           return interaction.editReply({
-            content: `A área da cidade ${selectedCity.label} foi adicionada para você!`,
+            content: `:white_check_mark: A área da cidade ${selectedCity.label} foi adicionada para você!`,
 
             embeds: [embed],
             components: [components],
@@ -139,7 +118,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         }
 
         return await interaction.editReply({
-          content: `A área da cidade ${selectedCity.label} foi adicionada para você!`,
+          content: `:white_check_mark: A área da cidade ${selectedCity.label} foi adicionada para você!`,
           embeds: [],
           components: [],
         });
@@ -161,7 +140,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
           await interaction.deferUpdate({ ephemeral: true });
           await interaction.member.roles.add(selectedNeighborhood.roleId);
           return await interaction.editReply({
-            content: `A área do bairro ${selectedNeighborhood.label} foi adicionada para você!`,
+            content: `:white_check_mark: A área do bairro ${selectedNeighborhood.label} foi adicionada para você!`,
             embeds: [],
             components: [],
           });
@@ -170,56 +149,13 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     }
   }
 
-  // ir para regras
-  if (isButton && interaction.customId === INTERACTION_IDS.BUTTON_RULES) {
-    const ruleEmbed = new EmbedBuilder()
-      .setColor('Blue')
-      .setDescription(
-        '``1`` Não é permitido qualquer tipo de desrespeito, preconceito e toxicidade entre os membros.\n\n``2`` Evite enviar links, mídias e outros conteúdos que fogem do tópico de cada canal.\n\n``3`` Não é permitido enviar mensagens repetidas de forma que polua o chat e atrapalhe a comunicação. Como por exemplo: spam, flood, e entre outros.\n\n``4`` Não permitimos material sexualmente explícito ou nudez. Também não permitimos conteúdos que encaminhem o tráfego a sites comerciais de pornografia.'
-      )
-      .setImage(
-        'https://cdn.discordapp.com/attachments/1065023880042909829/1066101388003774474/regrascruzeiro.png'
-      );
-
-    const row = new ActionRowBuilder().setComponents(
-      new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.OK_BUTTON)
-        .setLabel('Concordo')
-        .setStyle(ButtonStyle.Success)
-    );
-
-    interaction.reply({
-      ephemeral: true,
-      embeds: [ruleEmbed],
-      components: [row],
-    });
-  } else if (isButton && interaction.customId === INTERACTION_IDS.OK_BUTTON) {
-    const links =
-      'https://discord.com/channels/1040355324374306957/1040356717545930752';
-    // interação de concordo
-    const components = new ActionRowBuilder().setComponents(
-      new ButtonBuilder()
-        .setLabel('Faça seu login')
-        .setStyle(ButtonStyle.Link)
-        .setURL(links)
-    );
-
-    interaction.reply({
-      ephemeral: true,
-      content:
-        'Obrigado por entrar em nosso servidor oficial do Cruzeiro!\n> **E não esqueça de fazer seu login caso seja socio torcedor!**',
-      components: [components],
-    });
-  } else if (
-    isButton &&
-    interaction.customId === INTERACTION_IDS.REGION_BUTTON
-  ) {
-    // Ação de escolher sua região com opção de minas gerais ou outras capitais
+  if (isButton && interaction.customId === INTERACTION_IDS.REGION_BUTTON) {
+    // Interação de escolher sua região com opção de minas gerais ou outras capitais
     const regionEmbed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setTitle(':earth_americas: Escolha sua Região')
       .setDescription(
-        'Clique no botão que corresponde a sua região e participe de um área exclusiva no servidor com torcedores da onde você mora!'
+        '**Clique no botão** que corresponde a sua **região** e participe de um área **exclusiva** no servidor com **torcedores** da onde você mora!'
       );
     const components = new ActionRowBuilder().setComponents(
       new ButtonBuilder()
@@ -228,7 +164,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         .setStyle(ButtonStyle.Primary),
       new ButtonBuilder()
         .setCustomId(INTERACTION_IDS.CAPITIES_BUTTON)
-        .setLabel('Outras Capitais')
+        .setLabel('Outras regiões')
         .setStyle(ButtonStyle.Secondary)
     );
 
@@ -241,12 +177,12 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     isButton &&
     interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
   ) {
-    // capital
+    // interação capital
     const embed = new EmbedBuilder()
       .setColor(0x2f3136)
       .setTitle(':earth_americas: Escolha sua capital')
       .setDescription(
-        'Selecione abaixo se houver a opção da sua cidade. Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!'
+        '**Selecione abaixo** se houver a opção da sua **cidade**.\n\n  *Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!*'
       );
 
     const components = new ActionRowBuilder().setComponents(
@@ -263,7 +199,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
         )
     );
 
-    interaction.update({
+    interaction.reply({
       ephemeral: true,
       embeds: [embed],
       components: [components],
@@ -287,7 +223,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     await interaction.deferReply({ ephemeral: true });
     await interaction.member.roles.add(state.roleId);
     await interaction.editReply(
-      `A área da cidade ${state.label} foi adicionada para você!`
+      `:white_check_mark: A área da cidade ${state.label} foi adicionada para você!`
     );
   } else if (
     interaction.isStringSelectMenu() &&
@@ -308,7 +244,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
       await interaction.deferReply({ ephemeral: true });
       await interaction.member.roles.add(city.roleId);
       await interaction.editReply(
-        `A área da cidade ${city.label} foi adicionada para você!`
+        `:white_check_mark: A área da cidade ${city.label} foi adicionada para você!`
       );
     }
   }
