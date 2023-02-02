@@ -29,6 +29,9 @@ const {
 const {
   updateInteractionWithNotificationButton,
 } = require('./src/interactions/notify-interactions');
+const {
+  updateInteractionWithModalitieSelect,
+} = require('./src/interactions/role-notify-interaction');
 
 // Ids dos botões
 const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
@@ -39,7 +42,6 @@ const {
 // array de dados
 const capitiesOptions = require('./src/data/capities.json');
 const mgCitiesOptions = require('./src/data/mg-cities.json');
-const modalities = require('./src/data/modalities.json');
 
 const bot = new Client({
   intents: [
@@ -61,6 +63,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
   const isButton =
     interaction.type === InteractionType.MessageComponent &&
     interaction.componentType === ComponentType.Button;
+  const isSelectMenu = interaction.isStringSelectMenu() && interaction.customId;
 
   if (interaction.customId.startsWith(INTERACTION_IDS.MG_REGION_SELECT)) {
     const [_prefix, stateId, cityId] = interaction.customId.split(':'); // ["select-role", "{state}", "{?city}"]
@@ -171,26 +174,8 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     interaction.customId === INTERACTION_IDS.SPORT_BUTTON
   ) {
     updateInteractionWithNotificationButton(interaction);
-  } else if (
-    interaction.isStringSelectMenu() &&
-    interaction.customId === INTERACTION_IDS.NOTIFY_SELECT_MENU
-  ) {
-    const valueOption = interaction.values[0];
-    const modality = modalities.find(
-      (modalityOptions) => modalityOptions.value === valueOption
-    );
-
-    if (!modality) {
-      return console.error(
-        'modality selecionado não foi achado e eu implementei a mensagem para esse caso.'
-      );
-    }
-
-    await interaction.deferReply({ ephemeral: true });
-    await interaction.member.roles.add(modality.roleId);
-    await interaction.editReply(
-      `:white_check_mark: A notificação do esporte ${modality.label} foi adicionado para você!`
-    );
+  } else if (isSelectMenu === INTERACTION_IDS.NOTIFY_SELECT_MENU) {
+    updateInteractionWithModalitieSelect(interaction);
   } else if (
     isButton &&
     interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
