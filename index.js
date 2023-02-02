@@ -26,6 +26,9 @@ const { sendRegion } = require('./src/events/send-region');
 const {
   updateInteractionWithRegionButton,
 } = require('./src/interactions/region-interaction');
+const {
+  updateInteractionWithNotificationButton,
+} = require('./src/interactions/notify-interactions');
 
 // Ids dos botões
 const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
@@ -167,30 +170,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     isButton &&
     interaction.customId === INTERACTION_IDS.SPORT_BUTTON
   ) {
-    const embed = new EmbedBuilder()
-      .setColor(0x2f3136)
-      .setTitle(':bell: Escolha sobre o que você gosta para ser notificado!')
-      .setDescription(
-        '**Selecione** a modalidade que corresponde ao **esporte** que você gosta de acompanhar do **nosso time** e fique por dentro de tudo que acontece!'
-      );
-    const components = new ActionRowBuilder().setComponents(
-      new StringSelectMenuBuilder()
-        .setPlaceholder('Selecione a modalidade')
-        .setCustomId(INTERACTION_IDS.NOTIFY_SELECT_MENU)
-        .setMinValues(1)
-        .addOptions(
-          modalities.map((modalityOptions) => ({
-            label: modalityOptions.label,
-            value: modalityOptions.value,
-          }))
-        )
-    );
-
-    return interaction.reply({
-      ephemeral: true,
-      embeds: [embed],
-      components: [components],
-    });
+    updateInteractionWithNotificationButton(interaction);
   } else if (
     interaction.isStringSelectMenu() &&
     interaction.customId === INTERACTION_IDS.NOTIFY_SELECT_MENU
