@@ -2,7 +2,7 @@ const {
   ActionRowBuilder,
   StringSelectMenuBuilder,
 } = require('@discordjs/builders');
-const {} = require('discord.js');
+const { APIApplicationCommandPermissionsConstant } = require('discord.js');
 
 const modalities = require('../data/modalities.json');
 

@@ -32,6 +32,9 @@ const {
 const {
   updateInteractionWithModalitieSelect,
 } = require('./src/interactions/role-notify-interaction');
+const {
+  updateInteractionWithCapitalsButton,
+} = require('./src/interactions/capitals.interaction');
 
 // Ids dos botões
 const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
@@ -40,7 +43,7 @@ const {
 } = require('./src/interactions/mg-interactions');
 
 // array de dados
-const capitiesOptions = require('./src/data/capities.json');
+const capitalsOptions = require('./src/data/capitals.json');
 const mgCitiesOptions = require('./src/data/mg-cities.json');
 
 const bot = new Client({
@@ -181,39 +184,14 @@ bot.on(Events.InteractionCreate, async (interaction) => {
     interaction.customId === INTERACTION_IDS.CAPITIES_BUTTON
   ) {
     // interação capital
-    const embed = new EmbedBuilder()
-      .setColor(0x2f3136)
-      .setTitle(':earth_americas: Escolha sua capital')
-      .setDescription(
-        '**Selecione abaixo** se houver a opção da sua **cidade**.\n\n  *Se não houver a sua cidade, não se preocupe! É só enviar uma mensagem pedindo para adicionar sua cidade no <#1040370984613584959> que um dos moderadores irá criar para você!*'
-      );
-
-    const components = new ActionRowBuilder().setComponents(
-      new StringSelectMenuBuilder()
-        .setPlaceholder('Selecione sua cidade')
-        .setCustomId(INTERACTION_IDS.CAPITIES_SELECT_MENU)
-        .setMaxValues(1)
-        .addOptions(
-          capitiesOptions.map((stateOption) => ({
-            label: stateOption.label,
-            description: stateOption.description,
-            value: stateOption.value,
-          }))
-        )
-    );
-
-    interaction.reply({
-      ephemeral: true,
-      embeds: [embed],
-      components: [components],
-    });
+    updateInteractionWithCapitalsButton(interaction);
   } else if (
     interaction.isStringSelectMenu() &&
     interaction.customId === INTERACTION_IDS.CAPITIES_SELECT_MENU
   ) {
     // interação pós escolher a capital
     const valueOption = interaction.values[0];
-    const state = capitiesOptions.find(
+    const state = capitalsOptions.find(
       (stateOption) => stateOption.value === valueOption
     );
 
