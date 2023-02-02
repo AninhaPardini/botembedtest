@@ -17,10 +17,15 @@ const {
   MessageManager,
 } = require('discord.js');
 
-//
+// mensages
 const { sendHome } = require('./src/events/send-home');
 const { sendNotify } = require('./src/events/send-notify');
 const { sendRegion } = require('./src/events/send-region');
+
+// interaction
+const {
+  updateInteractionWithRegionButton,
+} = require('./src/interactions/region-interaction');
 
 // Ids dos botões
 const { INTERACTION_IDS, MG_STATE } = require('./src/constants');
@@ -157,28 +162,7 @@ bot.on(Events.InteractionCreate, async (interaction) => {
 
   if (isButton && interaction.customId === INTERACTION_IDS.REGION_BUTTON) {
     // Interação de escolher sua região com opção de minas gerais ou outras capitais
-    const regionEmbed = new EmbedBuilder()
-      .setColor(0x2f3136)
-      .setTitle(':earth_americas: Escolha sua Região')
-      .setDescription(
-        '**Clique no botão** que corresponde a sua **região** e participe de um área **exclusiva** no servidor com **torcedores** da onde você mora!'
-      );
-    const components = new ActionRowBuilder().setComponents(
-      new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.MG_REGION_SELECT + ':' + MG_STATE)
-        .setLabel('Minas Gerais')
-        .setStyle(ButtonStyle.Primary),
-      new ButtonBuilder()
-        .setCustomId(INTERACTION_IDS.CAPITIES_BUTTON)
-        .setLabel('Outras regiões')
-        .setStyle(ButtonStyle.Secondary)
-    );
-
-    interaction.reply({
-      ephemeral: true,
-      embeds: [regionEmbed],
-      components: [components],
-    });
+    updateInteractionWithRegionButton(interaction);
   } else if (
     isButton &&
     interaction.customId === INTERACTION_IDS.SPORT_BUTTON
